@@ -1,0 +1,150 @@
+.pricing-section {
+  padding: 80px 0;
+  background: #f8f9fa;
+}
+
+.pricing-section h2 {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #2c3e50;
+}
+
+.pricing-subtitle {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  margin-bottom: 3rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.pricing-card {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 2px solid transparent;
+  position: relative;
+}
+
+.pricing-card.featured {
+  border-color: #4a90e2;
+  transform: scale(1.05);
+}
+
+.pricing-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+}
+
+.pricing-card.featured:hover {
+  transform: scale(1.05) translateY(-10px);
+}
+
+.plan-header {
+  margin-bottom: 2rem;
+}
+
+.plan-header h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.plan-price {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #4a90e2;
+  margin-bottom: 0.5rem;
+}
+
+.plan-period {
+  font-size: 1rem;
+  color: #7f8c8d;
+  font-weight: 500;
+}
+
+.plan-features {
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.feature-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #f1f3f4;
+}
+
+.feature-row:last-child {
+  border-bottom: none;
+}
+
+.feature-text {
+  font-size: 0.9rem;
+  color: #2c3e50;
+  font-weight: 500;
+  flex: 1;
+  margin-right: 1rem;
+}
+
+.feature-value {
+  font-size: 0.85rem;
+  color: #4a90e2;
+  font-weight: 600;
+  text-align: right;
+  min-width: 120px;
+}
+
+.plan-note {
+  font-size: 0.8rem;
+  color: #95a5a6;
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .pricing-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .pricing-card {
+    padding: 2rem;
+  }
+
+  .pricing-card.featured {
+    transform: none;
+  }
+
+  .pricing-card.featured:hover {
+    transform: translateY(-10px);
+  }
+
+  .feature-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .feature-value {
+    text-align: left;
+    min-width: auto;
+  }
+
+  .pricing-section h2 {
+    font-size: 2rem;
+  }
+}

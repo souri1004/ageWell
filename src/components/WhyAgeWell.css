@@ -1,0 +1,86 @@
+.why-agewell {
+  padding: 80px 0;
+  background: #ffffff;
+}
+
+.why-agewell h2 {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+}
+
+.problem-statement {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  max-width: 800px;
+  margin: 0 auto 3rem;
+  line-height: 1.6;
+}
+
+.challenges {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.challenge-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  border: 1px solid #f1f3f4;
+}
+
+.challenge-card:hover {
+  transform: translateY(-5px);
+}
+
+.challenge-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: #4a90e2;
+}
+
+.challenge-card h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.challenge-card p {
+  color: #7f8c8d;
+}
+
+.solution-banner {
+  background: #ff8c00;
+  color: white;
+  padding: 1.5rem 2rem;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.heart-icon {
+  font-size: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .challenges {
+    grid-template-columns: 1fr;
+  }
+
+  .why-agewell h2 {
+    font-size: 2rem;
+  }
+}
