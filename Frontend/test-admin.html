@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin API Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; }
+        .success { color: green; }
+        .error { color: red; }
+        button { padding: 10px 20px; margin: 5px; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Admin API Test Page</h1>
+    
+    <div class="test-section">
+        <h3>1. Test Admin Login</h3>
+        <input type="email" id="email" placeholder="admin@agewell.com" value="admin@agewell.com">
+        <input type="password" id="password" placeholder="password" value="admin123456">
+        <button onclick="testLogin()">Test Login</button>
+        <div id="loginResult"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>2. Test API Endpoints</h3>
+        <button onclick="testProfile()">Test Profile</button>
+        <button onclick="testApplications()">Test Applications</button>
+        <button onclick="testBetaUsers()">Test Beta Users</button>
+        <div id="apiResult"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>3. Current Token</h3>
+        <div id="currentToken"></div>
+        <button onclick="clearToken()">Clear Token</button>
+    </div>
+
+    <script>
+        let currentToken = localStorage.getItem('adminToken');
+        
+        function updateTokenDisplay() {
+            document.getElementById('currentToken').textContent = currentToken || 'No token';
+        }
+        
+        updateTokenDisplay();
+        
+        async function testLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    currentToken = result.token;
+                    localStorage.setItem('adminToken', currentToken);
+                    updateTokenDisplay();
+                    document.getElementById('loginResult').innerHTML = `<span class="success">Login successful!</span><pre>${JSON.stringify(result, null, 2)}</pre>`;
+                } else {
+                    document.getElementById('loginResult').innerHTML = `<span class="error">Login failed: ${result.message}</span>`;
+                }
+            } catch (error) {
+                document.getElementById('loginResult').innerHTML = `<span class="error">Error: ${error.message}</span>`;
+            }
+        }
+        
+        async function testProfile() {
+            if (!currentToken) {
+                document.getElementById('apiResult').innerHTML = '<span class="error">No token available. Please login first.</span>';
+                return;
+            }
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/admin/profile', {
+                    headers: { 'Authorization': `Bearer ${currentToken}` }
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('apiResult').innerHTML = `<span class="success">Profile API working!</span><pre>${JSON.stringify(result, null, 2)}</pre>`;
+                } else {
+                    document.getElementById('apiResult').innerHTML = `<span class="error">Profile API failed: ${result.message}</span>`;
+                }
+            } catch (error) {
+                document.getElementById('apiResult').innerHTML = `<span class="error">Error: ${error.message}</span>`;
+            }
+        }
+        
+        async function testApplications() {
+            if (!currentToken) {
+                document.getElementById('apiResult').innerHTML = '<span class="error">No token available. Please login first.</span>';
+                return;
+            }
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/team-applications', {
+                    headers: { 'Authorization': `Bearer ${currentToken}` }
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('apiResult').innerHTML = `<span class="success">Applications API working!</span><pre>${JSON.stringify(result, null, 2)}</pre>`;
+                } else {
+                    document.getElementById('apiResult').innerHTML = `<span class="error">Applications API failed: ${result.message}</span>`;
+                }
+            } catch (error) {
+                document.getElementById('apiResult').innerHTML = `<span class="error">Error: ${error.message}</span>`;
+            }
+        }
+        
+        async function testBetaUsers() {
+            if (!currentToken) {
+                document.getElementById('apiResult').innerHTML = '<span class="error">No token available. Please login first.</span>';
+                return;
+            }
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/beta-users', {
+                    headers: { 'Authorization': `Bearer ${currentToken}` }
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('apiResult').innerHTML = `<span class="success">Beta Users API working!</span><pre>${JSON.stringify(result, null, 2)}</pre>`;
+                } else {
+                    document.getElementById('apiResult').innerHTML = `<span class="error">Beta Users API failed: ${result.message}</span>`;
+                }
+            } catch (error) {
+                document.getElementById('apiResult').innerHTML = `<span class="error">Error: ${error.message}</span>`;
+            }
+        }
+        
+        function clearToken() {
+            currentToken = null;
+            localStorage.removeItem('adminToken');
+            updateTokenDisplay();
+            document.getElementById('apiResult').innerHTML = '';
+            document.getElementById('loginResult').innerHTML = '';
+        }
+    </script>
+</body>
+</html>
