@@ -12,10 +12,6 @@ import teamApplications from './routes/teamApplications.js';
 import betaUsers from './routes/betaUsers.js';
 import admin from './routes/admin.js';
 
-// Import utilities
-// import seedData from './utils/seedData.js';
-
-// Load environment variables
 dotenv.config({ path: './config.env' });
 
 const __filename = fileURLToPath(import.meta.url);
@@ -38,53 +34,22 @@ app.use('/api/admin', admin);
 
 // Admin dashboard route
 app.get('/admin', (req, res) => {
-  res.json({ 
-    message: 'Admin Dashboard API',
-    endpoints: {
-      login: '/api/admin/login',
-      applications: '/api/team-applications',
-      users: '/api/beta-users'
-    }
-  });
+  res.json({ /* ... */ });
 });
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
-    message: 'AgeWell Backend is running',
-    timestamp: new Date().toISOString()
-  });
+  res.json({ /* ... */ });
 });
 
 // Root endpoint
 app.get('/', (req, res) => {
-  res.json({ 
-    message: 'Welcome to AgeWell Backend API',
-    version: '1.0.0',
-    endpoints: {
-      teamApplications: '/api/team-applications',
-      betaUsers: '/api/beta-users',
-      admin: '/api/admin'
-    }
-  });
+  res.json({ /* ... */ });
 });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  
-  if (err.name === 'MulterError') {
-    if (err.code === 'LIMIT_FILE_SIZE') {
-      return res.status(400).json({ message: 'File too large. Maximum size is 5MB.' });
-    }
-    if (err.code === 'LIMIT_UNEXPECTED_FILE') {
-      return res.status(400).json({ message: 'Unexpected file field.' });
-    }
-    return res.status(400).json({ message: 'File upload error.' });
-  }
-  
-  res.status(500).json({ message: 'Something went wrong!' });
+  // ... your error handling logic
 });
 
 // 404 handler
@@ -92,35 +57,5 @@ app.use('*', (req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-const PORT = process.env.PORT || 5000;
-
-// Start server
-const startServer = async () => {
-  try {
-    // Connect to database
-    await connectDB();
-    
-    // Seed initial data (optional - comment out in production)
-    // await seedData();
-    
-    // Correct
-    module.exports = app;
-    
-  } catch (error) {
-    console.error('Failed to start server:', error);
-    process.exit(1);
-  }
-};
-
-startServer();
-
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('SIGTERM received, shutting down gracefully');
-  process.exit(0);
-});
-
-process.on('SIGINT', () => {
-  console.log('SIGINT received, shutting down gracefully');
-  process.exit(0);
-});
+// Correct: Export the app for Vercel
+export default app; // Or use module.exports = app; for CommonJS
