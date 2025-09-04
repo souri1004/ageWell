@@ -103,11 +103,8 @@ const startServer = async () => {
     // Seed initial data (optional - comment out in production)
     // await seedData();
     
-    app.listen(PORT, () => {
-      console.log(`🚀 AgeWell Backend server running on port ${PORT}`);
-      console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
-      console.log(`🔗 API Base URL: http://localhost:${PORT}/api`);
-    });
+    // Correct
+    module.exports = app;
     
   } catch (error) {
     console.error('Failed to start server:', error);
