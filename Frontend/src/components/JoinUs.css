@@ -1,5 +1,5 @@
 .join-us-section {
-  padding: 80px 0;
+  padding: 60px 0;
   background: #f8f9fa;
 }
 
@@ -21,10 +21,14 @@
 }
 
 .professions-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 2rem;
   margin-bottom: 4rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .profession-card {
@@ -34,6 +38,8 @@
   text-align: center;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
+  width: 200px;
+  min-width: 250px;
   border: 1px solid #f1f3f4;
 }
 
@@ -195,9 +201,13 @@
 }
 
 @media (max-width: 768px) {
+  .join-us-section {
+    padding: 40px 0;
+  }
+  
   .professions-grid {
-    grid-template-columns: 1fr;
     gap: 1.5rem;
+    max-width: 500px;
   }
 
   .join-form-container {
@@ -210,5 +220,27 @@
 
   .join-us-section h2 {
     font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .join-us-section {
+    padding: 30px 0;
+  }
+  
+  .join-us-section h2 {
+    font-size: 1.8rem;
+  }
+  
+  .join-subtitle {
+    font-size: 1rem;
+  }
+  
+  .professions-grid {
+    max-width: 400px;
+  }
+  
+  .join-form-container {
+    padding: 1.5rem;
   }
 }

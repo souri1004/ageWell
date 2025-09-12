@@ -3,9 +3,9 @@ import "./WhyAgeWell.css";
 
 const WhyAgeWell = () => {
   return (
-    <section className="why-agewell" id="why-agewell">
-      <div className="container">
-        <h2>Why AgeWell?</h2>
+    <section className="why-peepal" id="why-peepal">
+      <div className="why-peepal-container">
+        <h2>Why Peepal ?</h2>
         <p className="problem-statement">
           India faces an eldercare crisis. Traditional solutions are expensive,
           unreliable, and don't address the growing needs of our aging

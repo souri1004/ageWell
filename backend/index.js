@@ -1,3 +1,4 @@
+// index.js
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -14,13 +15,19 @@ import admin from './routes/admin.js';
 
 dotenv.config({ path: './config.env' });
 
+// Connect Database
+connectDB();
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:5173", // React app
+  credentials: true
+}));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
@@ -32,24 +39,32 @@ app.use('/api/team-applications', teamApplications);
 app.use('/api/beta-users', betaUsers);
 app.use('/api/admin', admin);
 
-// Admin dashboard route
-app.get('/admin', (req, res) => {
-  res.json({ /* ... */ });
-});
-
 // Health check endpoint
 app.get('/api/health', (req, res) => {
-  res.json({ /* ... */ });
+  res.json({
+    status: 'OK',
+    message: 'Backend running',
+    version: '1.0.0'
+  });
 });
 
 // Root endpoint
 app.get('/', (req, res) => {
-  res.json({ /* ... */ });
+  res.json({
+    message: "Welcome to AgeWell Backend API",
+    version: "1.0.0",
+    endpoints: {
+      teamApplications: "/api/team-applications",
+      betaUsers: "/api/beta-users",
+      admin: "/api/admin"
+    }
+  });
 });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  // ... your error handling logic
+  console.error("Error middleware:", err.message);
+  res.status(500).json({ message: "Server error" });
 });
 
 // 404 handler
@@ -57,5 +72,5 @@ app.use('*', (req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-// Correct: Export the app for Vercel
-export default app; // Or use module.exports = app; for CommonJS
+// Export app for Vercel
+export default app;

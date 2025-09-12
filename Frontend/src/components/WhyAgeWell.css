@@ -1,14 +1,26 @@
-.why-agewell {
-  padding: 80px 0;
+.why-peepal {
   background: #ffffff;
+  position: relative;
 }
 
-.why-agewell h2 {
+.why-peepal h2 {
   font-size: 2.5rem;
+  font-weight: 700;
   text-align: center;
   margin-bottom: 2rem;
   color: #2c3e50;
 }
+
+.why-peepal-container{
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
 
 .problem-statement {
   text-align: center;
@@ -17,13 +29,14 @@
   max-width: 800px;
   margin: 0 auto 3rem;
   line-height: 1.6;
+  margin-top: 30px;
 }
 
 .challenges {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  display: flex;
   gap: 2rem;
   margin-bottom: 3rem;
+  flex: wrap;
 }
 
 .challenge-card {
@@ -68,6 +81,7 @@
   font-weight: 600;
   font-size: 1.1rem;
   max-width: 600px;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -84,3 +98,10 @@
     font-size: 2rem;
   }
 }
+
+
+
+
+
+
+

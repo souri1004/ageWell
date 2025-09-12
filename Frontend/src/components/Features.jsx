@@ -46,7 +46,11 @@ const Features = () => {
       <div className="container">
         <div className="features-wrapper">
           {features.map((feature, index) => (
-            <div key={index} className="feature-card">
+            <div 
+              key={index} 
+              className="feature-card animate-fade-in-up"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
               <div className="feature-icon">{feature.icon}</div>
               <h3>{feature.title}</h3>
               <p>{feature.description}</p>

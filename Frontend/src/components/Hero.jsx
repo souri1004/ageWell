@@ -10,16 +10,28 @@ const Hero = () => {
     }
   };
 
+  const navigateToPlans = () => {
+    window.location.href = "/plans.html";
+  };
+
   return (
     <section className="hero">
-      <div className="container">
+      <div >
         <div className="hero-content">
           <div className="hero-text">
             <h1>
-              Caring for{" "}
-              <span className="highlight-text">Seniors, Powered</span> by{" "}
-              <span className="highlight-text">AI</span> &{" "}
-              <span className="highlight-text">Compassion</span>
+              <div>
+                Caring for
+                <span className="highlight-text">{" "}Seniors,</span>
+              </div>
+              <div>
+                <span className="highlight-text">Powered</span> by{" "}
+                <span className="highlight-text">AI</span> &{" "}
+              </div>
+              <div>
+                <span className="highlight-text">Compassion</span>
+              </div>
+              
             </h1>
             <p>
               Comprehensive eldercare starting at just{" "}
@@ -27,25 +39,27 @@ const Hero = () => {
               loved ones the care they deserve with our blend of technology and
               human touch.
             </p>
-            <div className="hero-features">
-              <div className="feature-item">
-                <div className="feature-bullet">•</div>
-                <span>24/7 Support</span>
+
+            {/* Statistics Section - Replacing the bullet points */}
+            <div className="hero-stats">
+              <div className="stat-block">
+                <div className="stat-number">24/7</div>
+                <div className="stat-label">Support Available</div>
               </div>
-              <div className="feature-item">
-                <div className="feature-bullet">•</div>
-                <span>HIPAA-grade Privacy</span>
+              <div className="stat-divider"></div>
+              <div className="stat-block">
+                <div className="stat-number">15+</div>
+                <div className="stat-label">Languages</div>
               </div>
-              <div className="feature-item">
-                <div className="feature-bullet">•</div>
-                <span>Multilingual</span>
+              <div className="stat-divider"></div>
+              <div className="stat-block">
+                <div className="stat-number">HIPAA</div>
+                <div className="stat-label">Grade Security</div>
               </div>
             </div>
+
             <div className="hero-buttons">
-              <button
-                className="btn-gradient"
-                onClick={() => scrollToSection("beta-program")}
-              >
+              <button className="btn-gradient" onClick={navigateToPlans}>
                 Get Started
               </button>
               <button className="btn-outline">
@@ -55,19 +69,19 @@ const Hero = () => {
             </div>
           </div>
           <div className="hero-image">
-            <div className="image-container">
-              <div className="eldercare-image">
+            <div className="tilted-frame">
+              <div className="tilted-badge top-left">
+                <span>24/7 Support</span>
+              </div>
+              <div className="tilted-badge bottom-right">
+                <span>AI Powered Care</span>
+              </div>
+              <div className="tilted-inner">
                 <img
                   src={eldercareImage}
                   alt="Eldercare"
-                  className="eldercare-img"
+                  className="tilted-img"
                 />
-                <div className="image-overlay-top">
-                  <span>AI-Powered Care</span>
-                </div>
-                <div className="image-overlay-bottom">
-                  <span>24/7 Support</span>
-                </div>
               </div>
             </div>
           </div>

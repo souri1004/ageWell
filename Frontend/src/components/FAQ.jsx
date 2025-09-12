@@ -43,7 +43,7 @@ const FAQ = () => {
 
   return (
     <section className="faq-section" id="faq">
-      <div className="container">
+      <div className="">
         <h2>Frequently Asked Questions</h2>
         <p className="faq-subtitle">
           Everything you need to know about AgeWell's eldercare services

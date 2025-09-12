@@ -65,7 +65,7 @@ const BetaProgram = () => {
 
   return (
     <section className="beta-program" id="beta-program">
-      <div className="container">
+      <div className="">
         <h2>Join Our Beta Program</h2>
         <p>
           Sign up today and be the first to experience revolutionary elderly
@@ -112,26 +112,7 @@ const BetaProgram = () => {
           </button>
         </form>
         
-        <div className="beta-benefits">
-          <h3>Beta Program Benefits</h3>
-          <div className="benefits-grid">
-            <div className="benefit-item">
-              <div className="benefit-icon">🚀</div>
-              <h4>Early Access</h4>
-              <p>Be among the first to try our revolutionary features</p>
-            </div>
-            <div className="benefit-item">
-              <div className="benefit-icon">💬</div>
-              <h4>Direct Feedback</h4>
-              <p>Help shape the future of eldercare technology</p>
-            </div>
-            <div className="benefit-item">
-              <div className="benefit-icon">🎁</div>
-              <h4>Exclusive Perks</h4>
-              <p>Special discounts and premium features</p>
-            </div>
-          </div>
-        </div>
+        
       </div>
     </section>
   );

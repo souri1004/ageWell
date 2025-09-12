@@ -1,8 +1,13 @@
 import React from "react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import "./Header.css";
 import logoImage from "../assets/logoElder.png";
 
 const Header = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Scroll helper
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -10,70 +15,92 @@ const Header = () => {
     }
   };
 
-  const openAdminPanel = () => {
-    window.open('/admin.html', '_blank');
+  // Handle navigation + scroll
+  const handleScroll = (e, sectionId) => {
+    e.preventDefault();
+    if (location.pathname === "/") {
+      scrollToSection(sectionId);
+    } else {
+      navigate("/");
+      // Use a longer timeout and check if element exists
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          scrollToSection(sectionId);
+        }
+      }, 300);
+    }
+  };
+
+  // Handle logo click
+  const handleLogoClick = () => {
+    navigate("/");
   };
 
   return (
     <header className="header">
-      <div className="container">
-        <div className="logo">
-          <img src={logoImage} alt="AgeWell Logo" className="logo-image" />
-          <span>AgeWell</span>
-        </div>
-        <nav className="nav">
-          <a
-            href="#features"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection("features");
+      <div className="header-container ">
+        {/* Logo */}
+        <div className="logo" onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
+          <img 
+            src={logoImage} 
+            alt="AgeWell Logo" 
+            className="logo-image"
+            onError={(e) => {
+              // Fallback if image fails to load
+              e.target.style.display = 'none';
             }}
+          />
+          <span>Peepal</span>
+        </div>
+
+        {/* Navigation */}
+        <nav className="nav">
+          <button 
+            onClick={(e) => handleScroll(e, "features")}
           >
             Features
-          </a>
-          <a
-            href="#plans"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection("plans");
-            }}
+          </button>
+
+          {/* Separate Page for Plans */}
+          <NavLink
+            to="/plans"
+            className={({ isActive }) => (isActive ? "active-link" : "nav-link")}
           >
             Plans
-          </a>
-          <a
-            href="#why-agewell"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection("why-agewell");
-            }}
+          </NavLink>
+
+          <button 
+            className="nav-button"
+            onClick={(e) => handleScroll(e, "why-agewell")}
           >
             Why AgeWell
-          </a>
-          <a
-            href="#faq"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection("faq");
-            }}
+          </button>
+
+          <button 
+            className="nav-button"
+            onClick={(e) => handleScroll(e, "faq")}
           >
             FAQ
-          </a>
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              openAdminPanel();
-            }}
-            className="admin-link"
+          </button>
+
+          {/* Admin Separate Page */}
+          <NavLink
+            to="/admin"
+            className={({ isActive }) =>
+              isActive ? "admin-link" : "nav-link admin-link"
+            }
           >
             Admin
-          </a>
+          </NavLink>
         </nav>
+
+        {/* Buttons */}
         <div className="header-buttons">
           <button className="btn-outline">Coming Soon</button>
-          <button
+          <button 
             className="btn-primary"
-            onClick={() => scrollToSection("join-us")}
+            onClick={(e) => handleScroll(e, "join-us")}
           >
             Join Us
           </button>

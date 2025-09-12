@@ -107,7 +107,7 @@ const JoinUs = () => {
 
   return (
     <section className="join-us-section" id="join-us">
-      <div className="container">
+      <div className="">
         <h2>Join Our Healthcare Team</h2>
         <p className="join-subtitle">
           Be part of a revolutionary eldercare platform that combines technology

@@ -1,13 +1,15 @@
 .ai-human-section {
-  padding: 80px 0;
+  padding: 40px 0;
   background: linear-gradient(135deg, #4a90e2 0%, #20b2aa 100%);
   color: white;
   text-align: center;
+  position: relative;
 }
 
 .ai-human-section h2 {
   font-size: 2.5rem;
-  margin-bottom: 1.5rem;
+  color: white;
+  font-weight: 600;
 }
 
 .ai-human-section p {
@@ -18,9 +20,21 @@
   margin-left: auto;
   margin-right: auto;
 }
+.ai-human-content{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
 
 @media (max-width: 768px) {
   .ai-human-section h2 {
     font-size: 2rem;
   }
 }
+
+

@@ -1,0 +1,138 @@
+.footer {
+  background: #ffffff;
+  border-top: 1px solid #e5e7eb;
+  padding: 40px 0 20px;
+  color: #374151;
+}
+
+
+.footer-container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  
+}
+
+/* Brand block */
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+  margin-left: 10%;
+}
+
+.brand-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.brand-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+}
+.brand-name {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #111827;
+}
+
+.brand-desc {
+  color: #4b5563;
+  max-width: 680px;
+  line-height: 1.7;
+  font-size: 1.1rem;
+}
+
+.social-row {
+  display: flex;
+  gap: 14px;
+  
+}
+.social-btn {
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+.social-btn:hover {
+  background: #ff8c00;
+  color: #ffffff;
+  border-color: #ff8c00;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2rem;
+  margin-left: 10%;
+}
+
+.footer-col h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.75rem;
+}
+
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.footer-col li {
+  margin: 0.5rem 0;
+}
+.footer-col a {
+  color: #6b7280;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.footer-col a:hover {
+  color: #ff8c00;
+}
+
+.footer-bottom {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+  font-size: 0.9rem;
+  color: #9ca3af;
+  padding-left: 10%;
+}
+
+@media (max-width: 900px) {
+  .footer-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .brand-desc {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+  .social-row {
+    gap: 10px;
+  }
+  .social-btn {
+    width: 44px;
+    height: 44px;
+  }
+}

@@ -1,29 +1,34 @@
 import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Header from "./components/Header";
-import Hero from "./components/Hero";
-import WhyAgeWell from "./components/WhyAgeWell";
-import PricingPlans from "./components/PricingPlans";
-import Features from "./components/Features";
-import AIHumanSection from "./components/AIHumanSection";
-import ForSeniors from "./components/ForSeniors";
-import JoinUs from "./components/JoinUs";
-import FAQ from "./components/FAQ";
-import BetaProgram from "./components/BetaProgram";
+import PricingPlans from "./Pages/PricingPlans";
+import Admin from "./Pages/AdminLogin";
+import AdminDashboard from "./Pages/AdminDashboard";
+import ProtectedRoute from "./Pages/ProtectedRoute";
+import LandingPage from "./Pages/LandingPage";
+import Footer from "./components/Footer";
 
 function App() {
   return (
     <div className="App">
-      <Header />
-      <Hero />
-      <WhyAgeWell />
-      <ForSeniors />
-      <PricingPlans />
-      <Features />
-      <AIHumanSection />
-      <JoinUs />
-      <FAQ />
-      <BetaProgram />
+      <Router>
+        <Header />
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/plans" element={<PricingPlans />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route
+            path="/admin-dashboard"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+        <Footer />
+      </Router>
     </div>
   );
 }
