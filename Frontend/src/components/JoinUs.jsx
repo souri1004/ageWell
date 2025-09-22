@@ -9,8 +9,8 @@ const JoinUs = () => {
     profession: "",
     experience: "",
     location: "",
+    resumeLink: ""
   });
-  const [resume, setResume] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
 
@@ -21,48 +21,16 @@ const JoinUs = () => {
     });
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      // Validate file type
-      const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'];
-      if (!allowedTypes.includes(file.type)) {
-        setMessage({ type: 'error', text: 'Please select a valid file type (PDF, DOC, DOCX, or TXT)' });
-        return;
-      }
-      
-      // Validate file size (5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        setMessage({ type: 'error', text: 'File size must be less than 5MB' });
-        return;
-      }
-      
-      setResume(file);
-      setMessage({ type: 'success', text: 'Resume uploaded successfully!' });
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setMessage({ type: '', text: '' });
 
     try {
-      const formDataToSend = new FormData();
-      
-      // Add form fields
-      Object.keys(formData).forEach(key => {
-        formDataToSend.append(key, formData[key]);
-      });
-      
-      // Add resume file if selected
-      if (resume) {
-        formDataToSend.append('resume', resume);
-      }
-
       const response = await fetch('http://localhost:5000/api/team-applications/submit', {
         method: 'POST',
-        body: formDataToSend,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
       });
 
       const result = await response.json();
@@ -72,7 +40,7 @@ const JoinUs = () => {
           type: 'success', 
           text: 'Application submitted successfully! We\'ll contact you soon to discuss joining our team.' 
         });
-        
+
         // Reset form
         setFormData({
           fullName: "",
@@ -81,13 +49,9 @@ const JoinUs = () => {
           profession: "",
           experience: "",
           location: "",
+          resumeLink: ""
         });
-        setResume(null);
-        
-        // Clear file input
-        const fileInput = document.querySelector('input[type="file"]');
-        if (fileInput) fileInput.value = '';
-        
+
       } else {
         setMessage({ 
           type: 'error', 
@@ -118,9 +82,7 @@ const JoinUs = () => {
           <div className="profession-card">
             <div className="profession-icon">👨‍⚕️</div>
             <h3>Doctors</h3>
-            <p>
-              Provide expert medical consultations and care plans for seniors
-            </p>
+            <p>Provide expert medical consultations and care plans for seniors</p>
           </div>
           <div className="profession-card">
             <div className="profession-icon">👩‍⚕️</div>
@@ -141,13 +103,13 @@ const JoinUs = () => {
 
         <div className="join-form-container">
           <h3>Apply to Join Our Team</h3>
-          
+
           {message.text && (
             <div className={`message ${message.type}`}>
               {message.text}
             </div>
           )}
-          
+
           <form onSubmit={handleSubmit} className="join-form">
             <div className="form-row">
               <input
@@ -167,6 +129,7 @@ const JoinUs = () => {
                 required
               />
             </div>
+
             <div className="form-row">
               <input
                 type="tel"
@@ -189,6 +152,7 @@ const JoinUs = () => {
                 <option value="psychologist">Psychologist</option>
               </select>
             </div>
+
             <div className="form-row">
               <input
                 type="text"
@@ -207,29 +171,18 @@ const JoinUs = () => {
                 required
               />
             </div>
-            
+
             <div className="form-row">
-              <div className="file-upload-container">
-                <label htmlFor="resume" className="file-upload-label">
-                  📄 Upload Resume (Optional)
-                  <span className="file-info">PDF, DOC, DOCX, or TXT (Max 5MB)</span>
-                </label>
-                <input
-                  type="file"
-                  id="resume"
-                  name="resume"
-                  accept=".pdf,.doc,.docx,.txt"
-                  onChange={handleFileChange}
-                  className="file-input"
-                />
-                {resume && (
-                  <div className="file-selected">
-                    ✓ {resume.name}
-                  </div>
-                )}
-              </div>
+              <input
+                type="url"
+                name="resumeLink"
+                placeholder="Resume Link (Google Drive, OneDrive, etc.)"
+                value={formData.resumeLink}
+                onChange={handleInputChange}
+                required
+              />
             </div>
-            
+
             <button 
               type="submit" 
               className="btn-gradient"
