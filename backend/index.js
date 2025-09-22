@@ -1,7 +1,6 @@
 // index.js
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -13,7 +12,6 @@ import teamApplications from './routes/teamApplications.js';
 import betaUsers from './routes/betaUsers.js';
 import admin from './routes/admin.js';
 
-dotenv.config({ path: './config.env' });
 
 // Connect Database
 connectDB();

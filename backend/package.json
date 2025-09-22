@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
+    "vercel-start": "node index.js",
     "dev": "nodemon server.js",
     "seed": "node utils/seedData.js",
     "test": "echo \"Error: no test specified\" && exit 1"
