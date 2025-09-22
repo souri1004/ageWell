@@ -32,9 +32,8 @@ const teamApplicationSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
-  resumeLink: {   // 👈 replaced file object with just a link
+  resume: {   
     type: String,
-    required: true,
     trim: true
   },
   status: {

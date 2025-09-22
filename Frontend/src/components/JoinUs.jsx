@@ -9,16 +9,13 @@ const JoinUs = () => {
     profession: "",
     experience: "",
     location: "",
-    resumeLink: ""
+    resume: "" // backend expects 'resume'
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
 
   const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -38,9 +35,8 @@ const JoinUs = () => {
       if (response.ok) {
         setMessage({ 
           type: 'success', 
-          text: 'Application submitted successfully! We\'ll contact you soon to discuss joining our team.' 
+          text: 'Application submitted successfully! We\'ll contact you soon.' 
         });
-
         // Reset form
         setFormData({
           fullName: "",
@@ -49,21 +45,20 @@ const JoinUs = () => {
           profession: "",
           experience: "",
           location: "",
-          resumeLink: ""
+          resume: ""
         });
-
       } else {
-        setMessage({ 
-          type: 'error', 
-          text: result.message || 'Failed to submit application. Please try again.' 
-        });
+        // Display validation errors if present
+        if (result.errors) {
+          const errorText = result.errors.map(err => `${err.field}: ${err.msg}`).join(" | ");
+          setMessage({ type: 'error', text: errorText });
+        } else {
+          setMessage({ type: 'error', text: result.message || 'Failed to submit application.' });
+        }
       }
     } catch (error) {
       console.error('Error submitting application:', error);
-      setMessage({ 
-        type: 'error', 
-        text: 'Network error. Please check your connection and try again.' 
-      });
+      setMessage({ type: 'error', text: 'Network error. Please try again.' });
     } finally {
       setIsSubmitting(false);
     }
@@ -175,9 +170,9 @@ const JoinUs = () => {
             <div className="form-row">
               <input
                 type="url"
-                name="resumeLink"
+                name="resume"
                 placeholder="Resume Link (Google Drive, OneDrive, etc.)"
-                value={formData.resumeLink}
+                value={formData.resume}
                 onChange={handleInputChange}
                 required
               />

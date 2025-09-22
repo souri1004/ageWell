@@ -5,87 +5,68 @@ import { auth, checkPermission } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Validation rules
+// ---------- Application Validation ----------
 const applicationValidation = [
-  body('fullName').trim().isLength({ min: 2, max: 50 }).withMessage('Full name must be between 2 and 50 characters'),
-  body('email').isEmail().normalizeEmail().withMessage('Please provide a valid email'),
-  body('mobile').trim().isLength({ min: 10, max: 15 }).withMessage('Mobile number must be between 10 and 15 characters'),
-  body('profession').isIn(['doctor', 'nurse', 'physiotherapist', 'psychologist']).withMessage('Invalid profession'),
-  body('experience').trim().isLength({ min: 1, max: 100 }).withMessage('Experience must be between 1 and 100 characters'),
-  body('location').trim().isLength({ min: 2, max: 100 }).withMessage('Location must be between 2 and 100 characters'),
-  body('resumeLink').isURL().withMessage('Resume link must be a valid URL')
+  body('fullName').trim().isLength({ min: 2, max: 50 }).withMessage('Full name must be 2-50 chars'),
+  body('email').isEmail().normalizeEmail().withMessage('Invalid email'),
+  body('mobile').trim().isLength({ min: 10, max: 15 }).withMessage('Mobile 10-15 chars'),
+  body('profession').isIn(['doctor','nurse','physiotherapist','psychologist']).withMessage('Invalid profession'),
+  body('experience').trim().isLength({ min: 1, max: 100 }).withMessage('Experience 1-100 chars'),
+  body('location').trim().isLength({ min: 2, max: 100 }).withMessage('Location 2-100 chars'),
+  body('resume').isURL().withMessage('Resume must be a valid URL')
 ];
 
-// Submit team application (public route)
+// ---------- Submit Team Application (Public) ----------
 router.post('/submit', applicationValidation, async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ 
-        message: 'Validation failed', 
-        errors: errors.array() 
+      return res.status(400).json({
+        message: 'Validation failed',
+        errors: errors.array().map(e => ({ field: e.param, msg: e.msg }))
       });
     }
 
-    // Check if application already exists for this email and profession
     const existingApplication = await TeamApplication.findOne({
       email: req.body.email,
       profession: req.body.profession
     });
-
     if (existingApplication) {
-      return res.status(400).json({ 
-        message: 'You have already applied for this profession' 
-      });
+      return res.status(400).json({ message: 'You have already applied for this profession' });
     }
 
-    // Create application data
-    const applicationData = {
+    const application = new TeamApplication({
       fullName: req.body.fullName,
       email: req.body.email,
       mobile: req.body.mobile,
       profession: req.body.profession,
       experience: req.body.experience,
       location: req.body.location,
-      resumeLink: req.body.resumeLink,
+      resume: req.body.resume, // store the URL directly
       notes: req.body.notes
-    };
-
-    const application = new TeamApplication(applicationData);
-    await application.save();
-
-    res.status(201).json({
-      message: 'Application submitted successfully',
-      applicationId: application._id
     });
 
+    await application.save();
+    res.status(201).json({ message: 'Application submitted successfully', applicationId: application._id });
   } catch (error) {
     console.error('Error submitting application:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
 
-// Get all applications (admin only)
+// ---------- Get All Applications (Admin) ----------
 router.get('/', auth, checkPermission('viewApplications'), async (req, res) => {
   try {
-    const { page = 1, limit = 10, status, profession, search } = req.query;
-    
+    const { status, profession, search } = req.query;
     let query = {};
-
     if (status) query.status = status;
     if (profession) query.profession = profession;
-    if (search) {
-      query.$or = [
-        { fullName: { $regex: search, $options: 'i' } },
-        { email: { $regex: search, $options: 'i' } }
-      ];
-    }
+    if (search) query.$or = [
+      { fullName: { $regex: search, $options: 'i' } },
+      { email: { $regex: search, $options: 'i' } }
+    ];
 
-    const applications = await TeamApplication.find(query)
-      .sort({ applicationDate: -1 })
-      .limit(parseInt(limit))
-      .skip((parseInt(page) - 1) * parseInt(limit));
-
+    const applications = await TeamApplication.find(query).sort({ createdAt: -1 });
     res.json(applications);
   } catch (error) {
     console.error('Error fetching applications:', error);
@@ -93,7 +74,7 @@ router.get('/', auth, checkPermission('viewApplications'), async (req, res) => {
   }
 });
 
-// Get single application (admin only)
+// ---------- Get Single Application (Admin) ----------
 router.get('/:id', auth, checkPermission('viewApplications'), async (req, res) => {
   try {
     const application = await TeamApplication.findById(req.params.id);
@@ -105,38 +86,31 @@ router.get('/:id', auth, checkPermission('viewApplications'), async (req, res) =
   }
 });
 
-// Update application status (admin only)
-router.patch('/:id/status', auth, checkPermission('updateApplications'),
-  [
-    body('status').isIn(['pending', 'approved', 'rejected']).withMessage('Invalid status'),
-    body('adminNotes').optional().trim().isLength({ max: 500 }).withMessage('Admin notes too long')
-  ],
-  async (req, res) => {
-    try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ message: 'Validation failed', errors: errors.array() });
-      }
+// ---------- Update Application Status (Admin) ----------
+router.patch('/:id/status', auth, checkPermission('updateApplications'), [
+  body('status').isIn(['pending', 'approved', 'rejected']).withMessage('Invalid status'),
+  body('adminNotes').optional().trim().isLength({ max: 500 }).withMessage('Admin notes too long')
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(400).json({ message: 'Validation failed', errors: errors.array() });
 
-      const { status, adminNotes } = req.body;
+    const { status, adminNotes } = req.body;
+    const application = await TeamApplication.findByIdAndUpdate(
+      req.params.id,
+      { status, adminNotes },
+      { new: true }
+    );
+    if (!application) return res.status(404).json({ message: 'Application not found' });
 
-      const application = await TeamApplication.findByIdAndUpdate(
-        req.params.id,
-        { status, adminNotes, updatedAt: Date.now() },
-        { new: true }
-      );
-
-      if (!application) return res.status(404).json({ message: 'Application not found' });
-
-      res.json({ message: 'Application status updated successfully', application });
-    } catch (error) {
-      console.error('Error updating application:', error);
-      res.status(500).json({ message: 'Server error' });
-    }
+    res.json({ message: 'Application status updated successfully', application });
+  } catch (error) {
+    console.error('Error updating application:', error);
+    res.status(500).json({ message: 'Server error' });
   }
-);
+});
 
-// Delete application (admin only)
+// ---------- Delete Application (Admin) ----------
 router.delete('/:id', auth, checkPermission('deleteApplications'), async (req, res) => {
   try {
     const application = await TeamApplication.findById(req.params.id);
@@ -146,27 +120,6 @@ router.delete('/:id', auth, checkPermission('deleteApplications'), async (req, r
     res.json({ message: 'Application deleted successfully' });
   } catch (error) {
     console.error('Error deleting application:', error);
-    res.status(500).json({ message: 'Server error' });
-  }
-});
-
-// Get application statistics (admin only)
-router.get('/stats/overview', auth, checkPermission('viewApplications'), async (req, res) => {
-  try {
-    const stats = await TeamApplication.aggregate([
-      { $group: { _id: '$status', count: { $sum: 1 } } }
-    ]);
-
-    const professionStats = await TeamApplication.aggregate([
-      { $group: { _id: '$profession', count: { $sum: 1 } } }
-    ]);
-
-    const totalApplications = await TeamApplication.countDocuments();
-    const pendingApplications = await TeamApplication.countDocuments({ status: 'pending' });
-
-    res.json({ totalApplications, pendingApplications, statusBreakdown: stats, professionBreakdown: professionStats });
-  } catch (error) {
-    console.error('Error fetching statistics:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });

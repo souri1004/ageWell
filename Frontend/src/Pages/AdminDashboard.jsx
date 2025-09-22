@@ -19,35 +19,31 @@ const AdminDashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterValue, setFilterValue] = useState("all");
 
-  // ✅ Check authentication and load data
   useEffect(() => {
     const token = localStorage.getItem("adminToken");
     if (!token) {
       window.location.href = "/admin";
       return;
     }
-    testTokenAndLoadData(token);
+    loadDashboardData(token);
   }, []);
 
-  const testTokenAndLoadData = async (token) => {
+  const loadDashboardData = async (token) => {
     try {
       setLoading(true);
-      const profileResponse = await fetch(
-        "http://localhost:5000/api/admin/profile",
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
 
-      if (!profileResponse.ok) {
-        throw new Error("Invalid token");
-      }
-
-      const profileData = await profileResponse.json();
+      // Fetch admin profile
+      const profileRes = await fetch("http://localhost:5000/api/admin/profile", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!profileRes.ok) throw new Error("Invalid token");
+      const profileData = await profileRes.json();
       setAdminName(profileData.username || "Admin");
 
-      await fetchApplications(token);
-      await fetchBetaUsers(token);
-    } catch (error) {
-      console.error("Auth error:", error);
+      // Fetch applications and beta users concurrently
+      await Promise.all([fetchApplications(token), fetchBetaUsers(token)]);
+    } catch (err) {
+      console.error("Dashboard load error:", err);
       localStorage.removeItem("adminToken");
       window.location.href = "/admin";
     } finally {
@@ -57,39 +53,45 @@ const AdminDashboard = () => {
 
   const fetchApplications = async (token) => {
     try {
-      const response = await fetch("http://localhost:5000/api/team-applications", {
+      const res = await fetch("http://localhost:5000/api/team-applications", {
         headers: { Authorization: `Bearer ${token}` },
       });
+      console.log("Applications fetch status:", res.status);
 
-      if (response.ok) {
-        const data = await response.json();
-        setApplications(data);
-        setFilteredApplications(data);
-        updateStats(data, betaUsers);
-      } else {
-        throw new Error("Failed to fetch applications");
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.message || "Failed to fetch applications");
       }
-    } catch (error) {
-      setError(error.message);
+
+      const data = await res.json();
+      setApplications(data);
+      setFilteredApplications(data);
+      updateStats(data, betaUsers);
+    } catch (err) {
+      console.error("Fetch applications error:", err);
+      setError(err.message);
     }
   };
 
   const fetchBetaUsers = async (token) => {
     try {
-      const response = await fetch("http://localhost:5000/api/beta-users", {
+      const res = await fetch("http://localhost:5000/api/beta-users", {
         headers: { Authorization: `Bearer ${token}` },
       });
+      console.log("Beta users fetch status:", res.status);
 
-      if (response.ok) {
-        const data = await response.json();
-        setBetaUsers(data);
-        setFilteredBetaUsers(data);
-        updateStats(applications, data);
-      } else {
-        throw new Error("Failed to fetch users");
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.message || "Failed to fetch beta users");
       }
-    } catch (error) {
-      setError(error.message);
+
+      const data = await res.json();
+      setBetaUsers(data);
+      setFilteredBetaUsers(data);
+      updateStats(applications, data);
+    } catch (err) {
+      console.error("Fetch beta users error:", err);
+      setError(err.message);
     }
   };
 
@@ -145,30 +147,26 @@ const AdminDashboard = () => {
   const updateApplicationStatus = async (id, status) => {
     try {
       const token = localStorage.getItem("adminToken");
-      const response = await fetch(
-        `http://localhost:5000/api/team-applications/${id}/status`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ status }),
-        }
-      );
+      const res = await fetch(`http://localhost:5000/api/team-applications/${id}/status`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ status }),
+      });
 
-      if (response.ok) {
-        const updated = applications.map((app) =>
-          app._id === id ? { ...app, status } : app
-        );
-        setApplications(updated);
-        updateStats(updated, betaUsers);
-        handleFilter();
-      } else {
-        setError("Failed to update status");
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.message || "Failed to update status");
       }
-    } catch (error) {
-      setError("Failed to update status");
+
+      const updatedApps = applications.map((app) =>
+        app._id === id ? { ...app, status } : app
+      );
+      setApplications(updatedApps);
+      handleFilter();
+      updateStats(updatedApps, betaUsers);
+    } catch (err) {
+      console.error("Update status error:", err);
+      setError(err.message);
     }
   };
 
@@ -239,12 +237,20 @@ const AdminDashboard = () => {
               value={filterValue}
               onChange={(e) => setFilterValue(e.target.value)}
             >
-              <option value="all">All Status</option>
-              <option value="pending">Pending</option>
-              <option value="approved">Approved</option>
-              <option value="rejected">Rejected</option>
-              <option value="active">Active</option>
-              <option value="waitlist">Waitlist</option>
+              {currentTab === "applications" ? (
+                <>
+                  <option value="all">All Status</option>
+                  <option value="pending">Pending</option>
+                  <option value="approved">Approved</option>
+                  <option value="rejected">Rejected</option>
+                </>
+              ) : (
+                <>
+                  <option value="all">All Status</option>
+                  <option value="active">Active</option>
+                  <option value="waitlist">Waitlist</option>
+                </>
+              )}
             </select>
           </div>
         </div>
@@ -292,19 +298,17 @@ const AdminDashboard = () => {
                             <span className="detail-value">{app.profession}</span>
                           </div>
                           <div className="detail-row">
-                            <span className="detail-label">Experience:</span>
-                            <span className="detail-value">{app.experience}</span>
+                            <span className="detail-label">Resume:</span>
+                            <span className="detail-value">
+                              <a
+                                href={app.resume}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                View Resume
+                              </a>
+                            </span>
                           </div>
-                          <div className="detail-row">
-                            <span className="detail-label">Location:</span>
-                            <span className="detail-value">{app.location}</span>
-                          </div>
-                          {app.notes && (
-                            <div className="detail-row">
-                              <span className="detail-label">Notes:</span>
-                              <span className="detail-value">{app.notes}</span>
-                            </div>
-                          )}
                         </div>
                         <div className="card-actions">
                           <select
@@ -352,16 +356,6 @@ const AdminDashboard = () => {
                           <div className="detail-row">
                             <span className="detail-label">Mobile:</span>
                             <span className="detail-value">{user.mobile}</span>
-                          </div>
-                          <div className="detail-row">
-                            <span className="detail-label">Beta Tier:</span>
-                            <span className="detail-value">{user.betaTier}</span>
-                          </div>
-                          <div className="detail-row">
-                            <span className="detail-label">Signup Date:</span>
-                            <span className="detail-value">
-                              {new Date(user.signupDate).toLocaleDateString()}
-                            </span>
                           </div>
                         </div>
                       </div>
