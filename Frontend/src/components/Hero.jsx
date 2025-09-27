@@ -42,7 +42,8 @@ const Hero = () => {
       <div>
         <div className="hero-content">
           <div className="hero-text">
-            <h1>
+            <div className="heroHuBhai">
+              <h1 >
               <div>
                 Caring for
                 <span className="highlight-text"> Seniors,</span>
@@ -55,6 +56,8 @@ const Hero = () => {
                 <span className="highlight-text">Compassion</span>
               </div>
             </h1>
+            </div>
+            
             <p>
               Comprehensive eldercare starting at just{" "}
               <span className="price-highlight">₹4,999/month</span>. Give your

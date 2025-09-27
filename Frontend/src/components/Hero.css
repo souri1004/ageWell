@@ -71,6 +71,7 @@
 }
 
 .btn-gradient:hover {
+  background-color: #4a90e2;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
 }
@@ -106,6 +107,7 @@
 /* New tilted image frame */
 .tilted-frame {
   /* position: relative; */
+  
   width: 530px;
   max-width: 100%;
   transform: rotate(-6deg);
@@ -230,6 +232,7 @@
 
   .hero-text {
     padding-right: 0;
+    
   }
 
   .hero-buttons {
@@ -243,7 +246,7 @@
   }
 
   .tilted-frame {
-    margin: 0 auto;
+    margin: 0px auto;
     width: 480px;
     max-width: 100%;
   }
