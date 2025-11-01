@@ -1,11 +1,17 @@
 // index.js
+import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+dotenv.config({ path: './config.env' });
+
 // Import database connection
 import connectDB from './config/database.js';
+
+// Connect Database
+connectDB();
 
 // Import routes
 import teamApplications from './routes/teamApplications.js';
@@ -13,8 +19,7 @@ import betaUsers from './routes/betaUsers.js';
 import admin from './routes/admin.js';
 
 
-// Connect Database
-connectDB();
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,14 +28,17 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: "http://localhost:5173", // React app
+  origin: process.env.CLIENT_URL, 
   credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Serve uploaded files
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+
 
 // Routes
 app.use('/api/team-applications', teamApplications);
