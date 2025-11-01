@@ -26,6 +26,8 @@ const JoinUs = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -33,7 +35,7 @@ const JoinUs = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/team-applications/submit",
+        `${API_URL}/api/team-applications/submit`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

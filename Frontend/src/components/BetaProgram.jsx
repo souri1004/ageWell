@@ -16,6 +16,7 @@ const BetaProgram = () => {
       [e.target.name]: e.target.value,
     });
   };
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,7 +24,7 @@ const BetaProgram = () => {
     setMessage({ type: '', text: '' });
 
     try {
-      const response = await fetch('http://localhost:5000/api/beta-users/join', {
+      const response = await fetch(`${API_URL}/api/beta-users/join`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

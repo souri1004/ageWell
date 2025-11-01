@@ -27,13 +27,14 @@ const AdminDashboard = () => {
     }
     loadDashboardData(token);
   }, []);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const loadDashboardData = async (token) => {
     try {
       setLoading(true);
 
       // Fetch admin profile
-      const profileRes = await fetch("http://localhost:5000/api/admin/profile", {
+      const profileRes = await fetch(`${API_URL}/api/admin/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!profileRes.ok) throw new Error("Invalid token");
@@ -53,7 +54,7 @@ const AdminDashboard = () => {
 
   const fetchApplications = async (token) => {
     try {
-      const res = await fetch("http://localhost:5000/api/team-applications", {
+      const res = await fetch(`${API_URL}/api/team-applications`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log("Applications fetch status:", res.status);
@@ -75,7 +76,7 @@ const AdminDashboard = () => {
 
   const fetchBetaUsers = async (token) => {
     try {
-      const res = await fetch("http://localhost:5000/api/beta-users", {
+      const res = await fetch(`${API_URL}/api/beta-users`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log("Beta users fetch status:", res.status);
@@ -147,7 +148,7 @@ const AdminDashboard = () => {
   const updateApplicationStatus = async (id, status) => {
     try {
       const token = localStorage.getItem("adminToken");
-      const res = await fetch(`http://localhost:5000/api/team-applications/${id}/status`, {
+      const res = await fetch(`${API_URL}/api/team-applications/${id}/status`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ status }),
