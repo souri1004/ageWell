@@ -64,9 +64,9 @@
   text-decoration: none;
 }
 .social-btn:hover {
-  background: #ff8c00;
+  background: #4a90e2;
   color: #ffffff;
-  border-color: #ff8c00;
+  border-color: #4a90e2;
 }
 
 .footer-grid {
@@ -101,7 +101,7 @@
 }
 
 .footer-bottom {
-  margin-top: 24px;
+  margin-top: -9px;
   padding-top: 16px;
   border-top: 1px solid #e5e7eb;
   font-size: 0.9rem;

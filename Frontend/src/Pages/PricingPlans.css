@@ -139,8 +139,9 @@ body {
       }
 
       .pricing-card.featured {
-        border-color: #ff8c00;
-        box-shadow: 0 15px 40px rgba(255, 140, 0, 0.2);
+        border-color:#4a90e2;
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
       }
 
       .pricing-card.featured:hover {

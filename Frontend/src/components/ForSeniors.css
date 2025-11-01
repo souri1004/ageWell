@@ -34,7 +34,7 @@
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #4B90E2 0%, #4684e2 100%);
+  background: linear-gradient(135deg, #4b90e2 0%, #4684e2 100%);
   color: #fff;
   font-size: 1.25rem;
 }
@@ -65,6 +65,7 @@
   justify-content: center;
   gap: 1rem;
   margin-bottom: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .tabs-outside {
@@ -86,13 +87,14 @@
 }
 
 .tab:hover {
+  background: #4b90e2;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
 .tab.active {
-  background: #4B90E2;
+  background: #4b90e2;
   color: #ffffff;
-  border-color: #4B90E2;
+  border-color: #4b90e2;
 }
 
 .tab-icon {
@@ -132,7 +134,7 @@
 
 .interface-icon {
   font-size: 2rem;
-  color: #4B90E2;
+  color: #4b90e2;
   flex-shrink: 0;
 }
 
@@ -185,5 +187,10 @@
 
   .for-seniors h2 {
     font-size: 2rem;
+  }
+
+  .tab {
+    width: 100%;
+    justify-content: center;
   }
 }

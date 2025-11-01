@@ -1,8 +1,31 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./Hero.css";
 import eldercareImage from "../assets/eldercare2.png";
 
 const Hero = () => {
+  const imageRef = useRef(null);
+  const [imageVisible, setImageVisible] = useState(false);
+
+  useEffect(() => {
+    // Reveal hero image on scroll (primarily for mobile)
+    const target = imageRef.current;
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setImageVisible(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { root: null, threshold: 0.15 }
+    );
+
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, []);
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -16,13 +39,14 @@ const Hero = () => {
 
   return (
     <section className="hero">
-      <div >
+      <div>
         <div className="hero-content">
           <div className="hero-text">
-            <h1>
+            <div className="heroHuBhai">
+              <h1 >
               <div>
                 Caring for
-                <span className="highlight-text">{" "}Seniors,</span>
+                <span className="highlight-text"> Seniors,</span>
               </div>
               <div>
                 <span className="highlight-text">Powered</span> by{" "}
@@ -31,8 +55,9 @@ const Hero = () => {
               <div>
                 <span className="highlight-text">Compassion</span>
               </div>
-              
             </h1>
+            </div>
+            
             <p>
               Comprehensive eldercare starting at just{" "}
               <span className="price-highlight">₹4,999/month</span>. Give your
@@ -68,8 +93,8 @@ const Hero = () => {
               </button>
             </div>
           </div>
-          <div className="hero-image">
-            <div className="tilted-frame">
+          <div className="hero-image" ref={imageRef}>
+            <div className={`tilted-frame ${imageVisible ? "visible" : ""}`}>
               <div className="tilted-badge top-left">
                 <span>24/7 Support</span>
               </div>

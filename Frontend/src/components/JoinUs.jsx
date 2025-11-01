@@ -9,10 +9,18 @@ const JoinUs = () => {
     profession: "",
     experience: "",
     location: "",
-    resume: "" // backend expects 'resume'
+    resume: "", // backend expects 'resume'
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [message, setMessage] = useState({ type: '', text: '' });
+  const [message, setMessage] = useState({ type: "", text: "" });
+
+  const handleProfessionSelect = (professionValue) => {
+    setFormData((prev) => ({ ...prev, profession: professionValue }));
+    const selectEl = document.querySelector('select[name="profession"]');
+    if (selectEl) {
+      selectEl.focus();
+    }
+  };
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -21,21 +29,24 @@ const JoinUs = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setMessage({ type: '', text: '' });
+    setMessage({ type: "", text: "" });
 
     try {
-      const response = await fetch('http://localhost:5000/api/team-applications/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        "http://localhost:5000/api/team-applications/submit",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      );
 
       const result = await response.json();
 
       if (response.ok) {
-        setMessage({ 
-          type: 'success', 
-          text: 'Application submitted successfully! We\'ll contact you soon.' 
+        setMessage({
+          type: "success",
+          text: "Application submitted successfully! We'll contact you soon.",
         });
         // Reset form
         setFormData({
@@ -45,20 +56,25 @@ const JoinUs = () => {
           profession: "",
           experience: "",
           location: "",
-          resume: ""
+          resume: "",
         });
       } else {
         // Display validation errors if present
         if (result.errors) {
-          const errorText = result.errors.map(err => `${err.field}: ${err.msg}`).join(" | ");
-          setMessage({ type: 'error', text: errorText });
+          const errorText = result.errors
+            .map((err) => `${err.field}: ${err.msg}`)
+            .join(" | ");
+          setMessage({ type: "error", text: errorText });
         } else {
-          setMessage({ type: 'error', text: result.message || 'Failed to submit application.' });
+          setMessage({
+            type: "error",
+            text: result.message || "Failed to submit application.",
+          });
         }
       }
     } catch (error) {
-      console.error('Error submitting application:', error);
-      setMessage({ type: 'error', text: 'Network error. Please try again.' });
+      console.error("Error submitting application:", error);
+      setMessage({ type: "error", text: "Network error. Please try again." });
     } finally {
       setIsSubmitting(false);
     }
@@ -74,22 +90,44 @@ const JoinUs = () => {
         </p>
 
         <div className="professions-grid">
-          <div className="profession-card">
+          <div
+            className="profession-card"
+            onClick={() => handleProfessionSelect("doctor")}
+            role="button"
+            tabIndex={0}
+          >
             <div className="profession-icon">👨‍⚕️</div>
             <h3>Doctors</h3>
-            <p>Provide expert medical consultations and care plans for seniors</p>
+            <p>
+              Provide expert medical consultations and care plans for seniors
+            </p>
           </div>
-          <div className="profession-card">
+          <div
+            className="profession-card"
+            onClick={() => handleProfessionSelect("nurse")}
+            role="button"
+            tabIndex={0}
+          >
             <div className="profession-icon">👩‍⚕️</div>
             <h3>Nurses</h3>
             <p>Deliver compassionate nursing care and health monitoring</p>
           </div>
-          <div className="profession-card">
+          <div
+            className="profession-card"
+            onClick={() => handleProfessionSelect("physiotherapist")}
+            role="button"
+            tabIndex={0}
+          >
             <div className="profession-icon">🏃‍♂️</div>
             <h3>Physiotherapists</h3>
             <p>Help seniors maintain mobility and physical well-being</p>
           </div>
-          <div className="profession-card">
+          <div
+            className="profession-card"
+            onClick={() => handleProfessionSelect("psychologist")}
+            role="button"
+            tabIndex={0}
+          >
             <div className="profession-icon">🧠</div>
             <h3>Psychologists</h3>
             <p>Provide mental health support and emotional well-being</p>
@@ -100,9 +138,7 @@ const JoinUs = () => {
           <h3>Apply to Join Our Team</h3>
 
           {message.text && (
-            <div className={`message ${message.type}`}>
-              {message.text}
-            </div>
+            <div className={`message ${message.type}`}>{message.text}</div>
           )}
 
           <form onSubmit={handleSubmit} className="join-form">
@@ -178,12 +214,12 @@ const JoinUs = () => {
               />
             </div>
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="btn-gradient"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Submitting...' : 'Apply Now'}
+              {isSubmitting ? "Submitting..." : "Apply Now"}
             </button>
           </form>
         </div>

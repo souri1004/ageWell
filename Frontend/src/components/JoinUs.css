@@ -26,9 +26,11 @@
   justify-content: center;
   gap: 2rem;
   margin-bottom: 4rem;
-  max-width: 600px;
+  
   margin-left: auto;
   margin-right: auto;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 .profession-card {
@@ -38,8 +40,8 @@
   text-align: center;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
-  width: 200px;
-  min-width: 250px;
+  flex: 1 1 220px;
+  max-width: 260px;
   border: 1px solid #f1f3f4;
 }
 
@@ -152,7 +154,7 @@
 .file-upload-label {
   display: block;
   padding: 15px 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
   color: white;
   border-radius: 8px;
   cursor: pointer;
@@ -162,7 +164,7 @@
 }
 
 .file-upload-label:hover {
-  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  background: linear-gradient(135deg, #4a90e2 0%, #2f6fb0 100%);
   transform: translateY(-2px);
 }
 
@@ -204,14 +206,18 @@
   .join-us-section {
     padding: 40px 0;
   }
-  
+
   .professions-grid {
-    gap: 1.5rem;
-    max-width: 500px;
+    gap: 12px;
+    max-width: 100%;
+    padding-left: 16px;
+    padding-right: 16px;
   }
 
   .join-form-container {
-    padding: 2rem;
+    padding: 1.75rem;
+    margin-left: 16px;
+    margin-right: 16px;
   }
 
   .form-row {
@@ -221,26 +227,45 @@
   .join-us-section h2 {
     font-size: 2rem;
   }
+
+  .profession-card {
+    flex: 1 1 calc(50% - 12px);
+    max-width: none;
+  }
+
+  .join-form button {
+    align-self: stretch;
+    width: 100%;
+  }
 }
 
 @media (max-width: 480px) {
   .join-us-section {
     padding: 30px 0;
   }
-  
+
   .join-us-section h2 {
     font-size: 1.8rem;
   }
-  
+
   .join-subtitle {
     font-size: 1rem;
   }
-  
+
   .professions-grid {
-    max-width: 400px;
+    max-width: 100%;
+    padding-left: 12px;
+    padding-right: 12px;
   }
-  
+
   .join-form-container {
-    padding: 1.5rem;
+    padding: 1.25rem;
+    margin-left: 12px;
+    margin-right: 12px;
+  }
+
+  .profession-card {
+    flex: 1 1 100%;
+    max-width: 100%;
   }
 }
